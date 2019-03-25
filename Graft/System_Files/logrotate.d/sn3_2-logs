@@ -1,0 +1,7 @@
+/home/graft/sn3/logs/*.log-2* {
+    daily
+    rotate 3
+    missingok
+    compress
+    create
+}

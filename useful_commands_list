@@ -1,0 +1,12 @@
+scp from remote local
+
+scp -P <port> <remote_user>@<remote_machine_ip>:/<remote_machine_directory> ~/<local_machine_directory>
+
+scp local to remote
+
+scp -P <remote_port> ~/<local_machine_directory> <remote_user>@<remote_machine_ip>:/<remote_machine_directory>
+
+add -r if is a directory
+
+
+

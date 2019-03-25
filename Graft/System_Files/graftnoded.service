@@ -1,0 +1,15 @@
+[Unit]
+Description=Graft node Mainnet
+After=network-online.target
+
+[Service]
+User=graft
+Type=simple
+WorkingDirectory=~
+Restart=always
+ExecStart=/usr/bin/graftnoded --non-interactive
+#LimitNOFILE=8192
+Environment=TERM=xterm
+
+[Install]
+WantedBy=multi-user.target
