@@ -1,0 +1,97 @@
+Please note that if you are running compiled binaries or downloaded the binaries, all commands should be run in the same folder as the binary resides/lives and with ./ in front of the mentioned command, eg, ./graftnoded status.
+
+Mainnet:
+
+Default Port for graftnoded: 18980
+
+Public Testnet:
+
+Default Port for graftnoded: 28880
+
+For Deb packages:
+
+Launch graftnoded:
+
+graftnoded --detach
+______________
+
+Get status of graftnoded:
+
+graftnoded status
+______________
+
+Get graftnoded launch options:
+
+graftnoded --help
+______________
+
+Get graftnoded interactive commands like status previously mentioned:
+
+graftnoded help
+______________
+
+Once again just to remind users who are not familiar with Linux and the is more aimed at, If you are using compiled or downloaded binaries, you need to run these commands in the directory/folder where the binaries live and put ./ in fron like:
+
+./graftnoded --detach
+
+___________________________________________________________________
+
+Graft wallet commands:
+
+In the directory/folder you would like to sore the wallet in:
+
+graft-wallet-cli
+
+Follow prompts to launch and create a new wallet or use an existing wallet in the folder.
+________________
+
+To restore an existing wallet from the mmemonic seed:
+
+graft-wallet-cli --restore-deterministic-wallet
+
+Follow prompts and insert seed when requested.
+_______________
+
+In wallet commands:
+
+All shown < and > should not be used in the related commands
+
+To get current balance:
+
+balance
+______________
+
+Show the incoming and out-going transactions to this wallet:
+
+show_transfers
+
+_____________
+
+Make a payment:
+
+transfer <receiver_wallet_address> <amount>
+_____________
+
+Stake transfer
+
+stake_transfer <SUPERNODE_WALLET_PULIC_ADDRESS> <STAKE_AMOUNT> <LOCK_BLOCKS_COUNT> <SUPERNODE_PUBLIC_ID_KEY> <SUPERNODE_SIGNATURE>
+
+____________
+
+Checking if your supernode is running as expected:
+
+Locally on the machine supernode is running on:
+
+http://127.0.0.1:28690/debug/supernode_list/1
+
+From external (from your home pc to your VPS for example):
+
+http://<Your_Server_IP>:28690/debug/supernode_list/1
+
+The above commands show all supernodes that your supernode has picked up, in order to show all supernodes your supernodes recognizes as active please replace 1 with 0 at the end,
+
+Like:
+
+http://Your_Server_IP:28690/debug/supernode_list/0
+__________
+
