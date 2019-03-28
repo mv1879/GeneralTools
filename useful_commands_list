@@ -1,4 +1,4 @@
-scp from remote local
+scp from remote to local
 
 scp -P <port> <remote_user>@<remote_machine_ip>:/<remote_machine_directory> ~/<local_machine_directory>
 
