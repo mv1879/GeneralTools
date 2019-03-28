@@ -2,7 +2,6 @@
 # Clone Repo and chmod the setupsn.sh
 # Run this script from same git clone location
 
-SN=$(whiptail --inputbox "SN Number - Folder directory to be created for SN" 10 30 --output-fd 1)
 SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 3>&1 1>&2 2>&3)
 Wallet=$(whiptail --inputbox "Mainnet Wallet Address - Enter Wallet address for staking - Ctrl-Shift-V or Shift + Insert to paste from clipboard" 10 30 3>&1 1>&2 2>&3)
 SN_PORT=$(whiptail --inputbox "SN Port - Port to be used for SN - must be unique per SN" 10 30 3>&1 1>&2 2>&3)
