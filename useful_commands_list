@@ -25,9 +25,9 @@ sudo sendmailconfig
 
 Test:
 
-	- echo "Subject: sendmail test" | sudo sendmail -v <email>
+	- echo "Subject: sendmail test" | sudo sendmail -v <recipient_email>
 
-	- /usr/bin/systemctl status graftnoded_ptn | sudo sendmail -v <email>
+	- /usr/bin/systemctl status graftnoded_ptn | sudo sendmail -v <recipient_email>
 
 add systemd file for (replace <email>)
 
@@ -38,7 +38,7 @@ Description=Sent email
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | sendmail -v <email>'
+ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | sendmail -v <recipient_email>'
 
 [Install]
 WantedBy=multi-user.target
@@ -72,3 +72,7 @@ or for specific command
 %sudo ALL=NOPASSWD: /usr/bin/systemctl start notify-email@graftnoded_ptn.service
 -------------------------------
 
+Send mail entry for notify-email@.service with subject and from fields.
+-------------------------------
+ExecStart=/usr/bin/bash -c '(echo "Subject: %i Failure Alert"; echo "From: admin@debianserver2.com"; /usr/bin/systemctl status %i)| sudo sendmail -v <recipient_email>'
+-------------------------------
