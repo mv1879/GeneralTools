@@ -29,6 +29,24 @@ Test:
 
 	- /usr/bin/systemctl status graftnoded_ptn | sudo sendmail -v <email>
 
+add systemd file for (replace <email>)
+
+notify-email@.service
+-------------------------------
+[Unit]
+Description=Sent email
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | sendmail -v <email>'
+
+[Install]
+WantedBy=multi-user.target
+-------------------------------
+
+sudo systemctl enable notify-email@.service
+
+-------------------------------
 
 add variant to systemd file for service.
 
@@ -52,3 +70,5 @@ or
 or for specific command
 
 %sudo ALL=NOPASSWD: /usr/bin/systemctl start notify-email@graftnoded_ptn.service
+-------------------------------
+
