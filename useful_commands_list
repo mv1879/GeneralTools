@@ -48,8 +48,8 @@ sudo systemctl enable notify-email@.service
 
 -------------------------------
 
-add variant to systemd file for service.
-
+add variant to systemd file for service. Where graftnoded_ptn is the name of the systemd service you are adding it to.
+-------------------------------
 [Unit]
 OnFailure=notify-email@graftnoded_ptn.service
 [Service]
