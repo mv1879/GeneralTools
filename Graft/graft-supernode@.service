@@ -3,11 +3,11 @@ Description=Graft supernode
 After=graftnoded_ptn.service
 
 [Service]
-User=gareth
+User=EXEC_USER
 Type=simple
-WorkingDirectory=/home/gareth/%i/
+WorkingDirectory=/HOME_DIR/%i/
 Restart=always
-ExecStart=/usr/bin/graft-supernode --config-file config.ini --log-file /home/gareth/%i/logs/%i.log --log-level 1
+ExecStart=/usr/bin/graft-supernode --config-file config.ini --log-file HOME_DIR/%i/logs/%i.log --log-level 1
 Environment=TERM=xterm
 LimitNOFILE=8192
 

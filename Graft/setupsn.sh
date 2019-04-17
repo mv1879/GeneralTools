@@ -25,15 +25,17 @@ RPC_PORT=$(whiptail --inputbox "RPC port for Graftnoded - Mainnet Defailt = 1898
 P2P_PORT=$(whiptail --inputbox "P2P port for Graftnoded - Mainnet Default = 18980 | Public Testnet Default = 28880" 10 30 18980 3>&1 1>&2 2>&3)
 USER=$(whoami)
 CURRENT_DIR=`pwd`
+HOME_DIR_VAR=`awk -F: -v v="$USER" '{if ($1==v) print $6}' /etc/passwd`
 
 function SetupSN()
 {
-cd /home/$USER/
+cd ~/
 SN="$SN_NAME$(echo 000$n | tail -c 4)"
 mkdir ~/$SN &&
 cp $CURRENT_DIR/config.ini ~/"$SN"/config.ini &&
-sed -i "s|EXEC_USER|$USER|g" $CURRENT_DIR/graft-supernode@.service &&
 sudo cp $CURRENT_DIR/graft-supernode@.service /etc/systemd/system/graft-supernode-$USER@.service &&
+sudo sed -i "s|EXEC_USER|$USER|g" /etc/systemd/system/graft-supernode-$USER@.service &&
+sudo sed -i "s|HOME_DIR|$HOME_DIR_VAR|g" /etc/systemd/system/graft-supernode-$USER@.service &&
 sed -i "s|data_dir_var|/home/$USER/$SN/|g" ~/"$SN"/config.ini &&
 sed -i "s/wallet_var/$Wallet/g" ~/"$SN"/config.ini &&
 sed -i "s/rpc_port/$RPC_PORT/g" ~/"$SN"/config.ini &&
