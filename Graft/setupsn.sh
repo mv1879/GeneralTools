@@ -29,6 +29,7 @@ cd /home/$USER/
 SN="$SN_NAME$(echo 000$n | tail -c 4)"
 mkdir ~/$SN &&
 cp $CURRENT_DIR/config.ini ~/"$SN"/config.ini &&
+sudo cp $CURRENT_DIR/graft-supernode@.service /etc/systemd/system/graft-supernode@.service &&
 sed -i "s|data_dir_var|/home/$USER/$SN/|g" ~/"$SN"/config.ini &&
 sed -i "s/wallet_var/$Wallet/g" ~/"$SN"/config.ini &&
 sed -i "s/rpc_port/$RPC_PORT/g" ~/"$SN"/config.ini &&
