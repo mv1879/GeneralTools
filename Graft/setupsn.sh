@@ -2,6 +2,9 @@
 # Clone Repo and chmod the setupsn.sh
 # Run this script from same git clone location
 
+echo "Please input password to update apt and wait for prompts after completion"
+sudo apt update
+
 # Get SN Number
 n=0
 for i in $(ls ~) ; do
@@ -29,7 +32,8 @@ cd /home/$USER/
 SN="$SN_NAME$(echo 000$n | tail -c 4)"
 mkdir ~/$SN &&
 cp $CURRENT_DIR/config.ini ~/"$SN"/config.ini &&
-sudo cp $CURRENT_DIR/graft-supernode@.service /etc/systemd/system/graft-supernode@.service &&
+sed -i "s|EXEC_USER|$USER|g" $CURRENT_DIR/graft-supernode@.service &&
+sudo cp $CURRENT_DIR/graft-supernode@.service /etc/systemd/system/graft-supernode-$USER@.service &&
 sed -i "s|data_dir_var|/home/$USER/$SN/|g" ~/"$SN"/config.ini &&
 sed -i "s/wallet_var/$Wallet/g" ~/"$SN"/config.ini &&
 sed -i "s/rpc_port/$RPC_PORT/g" ~/"$SN"/config.ini &&
@@ -39,13 +43,20 @@ sed -i "s/port_var/$SN_PORT/g" ~/"$SN"/config.ini &
 
 function SetupSN-Systemd()
 {
-sudo systemctl enable graft-supernode@$SN.service
+sudo systemctl enable graft-supernode-$USER@$SN.service
 }
 
 function SetupSN-Systemd-Start()
 {
-sudo systemctl start graft-supernode@$SN.service
+sudo systemctl start graft-supernode-$USER@$SN.service
 }
+
+function Allow-SN_PORT-Ufw()
+{
+UfwInstall=`sudo apt install ufw -y` &&
+UfwPortConfig=`sudo ufw allow $SN_PORT/tcp`
+}
+
 
 SetupSN $SN $Wallet $SN_PORT $DATA_DIR $RPC_PORT $P2P_PORT $USER
 
@@ -55,6 +66,10 @@ fi
 
 if (whiptail --title "Start supernode" --yesno "Start supernode for this sn?" 10 60) then
   SetupSN-Systemd-Start $SN
+fi
+
+if (whiptail --title "ufw configuration" --yesno "Would you like to open the SN port on ufw?" 10 60) then
+  Allow-SN_PORT-Ufw $SN_Port
 fi
 
 variable=`tput setaf 6`
@@ -68,5 +83,8 @@ echo "${text}RPC port for Graftnoded - ${variable}$RPC_PORT"
 echo "${text}P2P port for Graftnoded - ${variable}$P2P_PORT"
 echo "${text}Above values represent the values inserted and used for the setup of your supernode, please cd to ${variable}~/$SN"
 echo "${text}Script and config.ini location - ${variable}$CURRENT_DIR${reset}"
-echo "${text}sudo systemctl start graft-supernode@$SN.service"
-echo "${text}run above command to start your SN - SN will start automatically on reboot"
+echo "${text}Example command to restart supernode: ${variable}sudo systemctl restart graft-supernode-$USER@$SN.service"
+echo "${text}SN will start automatically on reboot"
+echo "${text}Install UFW result : ${variable}$UfwInstall"
+echo "${text}UFW Port configure Result : ${variable}$UfwPortConfig"
+echo "${text}Take note that ufw has not been enabled, please ensure your SSH port is allowed before enabling with: ${variable} sudo ufw enable"
