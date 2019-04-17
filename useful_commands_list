@@ -13,4 +13,66 @@ Mounting a FTP location directly in Debian
 sudo curlftpfs -o allow_other ftp://ns391034.ip-176-31-102.eu:EG7EeuJT9z@ftpback-rbx3-269.ovh.net /mnt/ftp
 
 
+Useful:
 
+Fire email when systemd restarts service
+
+	- sudo apt install sendmail sendmail sendmail-cf m4 -y
+
+sudo sendmailconfig
+
+	- Answer y to all
+
+Test:
+
+	- echo "Subject: sendmail test" | sudo sendmail -v <recipient_email>
+
+	- /usr/bin/systemctl status graftnoded_ptn | sudo sendmail -v <recipient_email>
+
+add systemd file for (replace <email>)
+
+notify-email@.service
+-------------------------------
+[Unit]
+Description=Sent email
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | sendmail -v <recipient_email>'
+
+[Install]
+WantedBy=multi-user.target
+-------------------------------
+
+sudo systemctl enable notify-email@.service
+
+-------------------------------
+
+add variant to systemd file for service. Where graftnoded_ptn is the name of the systemd service you are adding it to.
+-------------------------------
+[Unit]
+OnFailure=notify-email@graftnoded_ptn.service
+[Service]
+ExecStartPost=/usr/bin/bash -c 'sudo systemctl start notify-email@graftnoded_ptn.service'
+
+---------
+
+Allow user/sudo group to execute command for systemctl with no password
+
+sudo visudo /etc/sudoers
+
+Add line:
+
+<user> ALL=(ALL) NOPASSWD: /usr/bin/systemctl
+or
+%sudo ALL=NOPASSWD: /usr/bin/systemctl
+
+or for specific command
+
+%sudo ALL=NOPASSWD: /usr/bin/systemctl start notify-email@graftnoded_ptn.service
+-------------------------------
+
+Send mail entry for notify-email@.service with subject and from fields.
+-------------------------------
+ExecStart=/usr/bin/bash -c '(echo "Subject: %i Failure Alert"; echo "From: admin@debianserver2.com"; /usr/bin/systemctl status %i)| sudo sendmail -v <recipient_email>'
+-------------------------------
