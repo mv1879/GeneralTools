@@ -63,17 +63,17 @@ function InstallUbuntu18_10
 
 choice=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 || uname -om`
 
-if [ "$choice" == "Ubuntu 18.04.2 LTS" ]; 
+if [ "$choice" = "Ubuntu 18.04.2 LTS" ]; 
 then
 InstallUbuntu18_04
 fi
 
-if [ "$choice" == "Debian GNU/Linux 9.8 (stretch)" ]; 
+if [ "$choice" = "Debian GNU/Linux 9.8 (stretch)" ]; 
 then
 InstallDebian9Stretch
 fi
 
-if [ "$choice" == "Debian GNU/Linux buster/sid" ]; 
+if [ "$choice" = "Debian GNU/Linux buster/sid" ]; 
 then
 InstallDebiantesting
 fi
