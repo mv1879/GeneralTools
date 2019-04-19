@@ -1,3 +1,5 @@
+sudo apt update
+
 function InstallUbuntu18_04
 {
         echo "Distro chosen: Ubuntu 18.04" &&
