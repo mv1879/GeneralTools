@@ -5,7 +5,7 @@ PKGS="graft-blockchain-tools graftnoded graft-wallet graft-supernode"
 function InstallUbuntu18_04
 {
         echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
+        sudo apt update && sudo apt upgrade -y && sudo apt install curl gnupg2 -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community bionic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
         sudo apt install $PKGS -y &&
@@ -15,7 +15,7 @@ function InstallUbuntu18_04
 function InstallDebian9Stretch
 {
         echo "Installing Deb Packages for Distro: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
+        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community stretch main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
         sudo apt install $PKGS -y &&
@@ -25,7 +25,7 @@ function InstallDebian9Stretch
 function InstallDebiantesting
 {
         echo "Installing Deb Packages for Distro: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
+        sudo apt update && sudo apt upgrade -y && sudo apt install curl gnupg2 -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community sid main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
         sudo apt install $PKGS -y &&
@@ -35,7 +35,7 @@ function InstallDebiantesting
 function InstallInstallUbuntu16_04
 {
         echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
+        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community xenial main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
         sudo apt install $PKGS -y &&
@@ -45,7 +45,7 @@ function InstallInstallUbuntu16_04
 function InstallUbuntu18_10
 {
         echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
+        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community cosmic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
         sudo apt install $PKGS -y &&
