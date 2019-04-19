@@ -8,7 +8,8 @@ function InstallUbuntu18_04
         sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community bionic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install $PKGS -y
+        sudo apt install $PKGS -y &&
+        echo "Successfully installed $PKGS"
 }
 
 function InstallDebian9Stretch
@@ -17,7 +18,8 @@ function InstallDebian9Stretch
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community stretch main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install $PKGS -y
+        sudo apt install $PKGS -y &&
+        echo "Successfully installed $PKGS"
 }
 
 function InstallDebiantesting
@@ -26,7 +28,8 @@ function InstallDebiantesting
         sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community sid main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install $PKGS -y
+        sudo apt install $PKGS -y &&
+        echo "Successfully installed $PKGS"
 }
 
 function InstallInstallUbuntu16_04
@@ -35,7 +38,8 @@ function InstallInstallUbuntu16_04
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community xenial main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install $PKGS -y
+        sudo apt install $PKGS -y &&
+        echo "Successfully installed $PKGS"
 }
 
 function InstallUbuntu18_10
@@ -44,7 +48,8 @@ function InstallUbuntu18_10
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community cosmic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install $PKGS -y
+        sudo apt install $PKGS -y &&
+        echo "Successfully installed $PKGS"
 }
 
 # Commented out due to changes in script where version is detected automatically, below presents GUI giving choice of OS's
