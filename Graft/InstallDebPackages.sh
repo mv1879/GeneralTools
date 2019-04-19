@@ -32,7 +32,7 @@ function InstallDebiantesting
         echo "Successfully installed $PKGS"
 }
 
-function InstallInstallUbuntu16_04
+function InstallUbuntu16_04
 {
         echo "Distro chosen: $choice" &&
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&

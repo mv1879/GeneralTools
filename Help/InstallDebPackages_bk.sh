@@ -32,7 +32,7 @@ function InstallDebiantesting
         echo "Successfully installed $PKGS"
 }
 
-function InstallInstallUbuntu16_04
+function InstallUbuntu16_04
 {
         echo "Distro chosen: $choice" &&
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
@@ -63,27 +63,27 @@ function InstallUbuntu18_10
 
 choice=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 || uname -om`
 
-if [ "$choice" == "Ubuntu 18.04.2 LTS" ]; 
+if [ "$choice" = "Ubuntu 18.04.2 LTS" ]; 
 then
 InstallUbuntu18_04
 fi
 
-if [ "$choice" == "Debian GNU/Linux 9.8 (stretch)" ]; 
+if [ "$choice" = "Debian GNU/Linux 9.8 (stretch)" ]; 
 then
 InstallDebian9Stretch
 fi
 
-if [ "$choice" == "Debian GNU/Linux buster/sid" ]; 
+if [ "$choice" = "Debian GNU/Linux buster/sid" ]; 
 then
 InstallDebiantesting
 fi
 
-if [ "$choice" == "4" ]; 
+if [ "$choice" == "Ubuntu 16.04.6 LTS" ]; 
 then
 InstallUbuntu16_04
 fi
 
-if [ "$choice" == "5" ]; 
+if [ "$choice" == "Ubuntu 18.10" ]; 
 then
 InstallUbuntu18_10
 fi
