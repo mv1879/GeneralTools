@@ -78,12 +78,12 @@ then
 InstallDebiantesting
 fi
 
-if [ "$choice" == "4" ]; 
+if [ "$choice" == "Ubuntu 16.04.6 LTS" ]; 
 then
 InstallUbuntu16_04
 fi
 
-if [ "$choice" == "5" ]; 
+if [ "$choice" == "Ubuntu 18.10" ]; 
 then
 InstallUbuntu18_10
 fi
