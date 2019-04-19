@@ -76,3 +76,11 @@ Send mail entry for notify-email@.service with subject and from fields.
 -------------------------------
 ExecStart=/usr/bin/bash -c '(echo "Subject: %i Failure Alert"; echo "From: admin@debianserver2.com"; /usr/bin/systemctl status %i)| sudo sendmail -v <recipient_email>'
 -------------------------------
+
+Personal Proxmox Cheat sheet
+
+pveam update
+
+pveam download local <image>
+example:
+pveam download local ubuntu-18.04-standard_18.04.1-1_amd64.tar.gz
