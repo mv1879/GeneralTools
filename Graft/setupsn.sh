@@ -15,7 +15,7 @@ DEF_PORT=$((18000 + $n))
 # End Defaults
 
 
-SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 $DEF_NAME 3>&1$
+SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 $DEF_NAME 3>&1$)
 Wallet=$(whiptail --inputbox "Mainnet Wallet Address - Enter Wallet address for staking - Ctrl-Shift-V or Shift + Insert to paste from clipboard" 10 30 3>&1 1>&2 2>&3)
 SN_PORT=$(whiptail --inputbox "SN Port - Port to be used for SN - must be unique per SN" 10 30 $DEF_PORT 3>&1 1>&2 2>&3)
 RPC_PORT=$(whiptail --inputbox "RPC port for Graftnoded - Mainnet Defailt = 18981 | Public Testnet Default = 28881" 10 30 18981 3>&1 1>&2 2>&3)
@@ -56,6 +56,6 @@ echo "${text}Mainnet Wallet Address - ${variable}$Wallet"
 echo "${text}Data Directory - ${variable}$DATA_DIR"
 echo "${text}RPC port for Graftnoded - ${variable}$RPC_PORT"
 echo "${text}P2P port for Graftnoded - ${variable}$P2P_PORT"
-echo "${text}Above values represent the values inserted and used for the setup of your supernode, please cd to ${variable}"~/$SN""
+echo "${text}Above values represent the values inserted and used for the setup of your supernode, please cd to ${variable}~/$SN"
 echo "${text}Script and config.ini location - ${variable}$CURRENT_DIR${reset}"
 
