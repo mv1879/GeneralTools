@@ -61,29 +61,29 @@ function InstallUbuntu18_10
 #"4" "Ubuntu 16.04 (xenial)." \
 #"5" "Ubuntu 18.10 (cosmic)." 3>&1 1>&2 2>&3)
 
-choice=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 || uname -om`
+choice=`lsb_release -c -s`
 
-if [ "$choice" = "Ubuntu 18.04.2 LTS" ]; 
+if [ "$choice" = "bionic" ]; 
 then
 InstallUbuntu18_04
 fi
 
-if [ "$choice" = "Debian GNU/Linux 9.8 (stretch)" ]; 
+if [ "$choice" = "stretch" ]; 
 then
 InstallDebian9Stretch
 fi
 
-if [ "$choice" = "Debian GNU/Linux buster/sid" ]; 
+if [ "$choice" = "buster" ]; 
 then
 InstallDebiantesting
 fi
 
-if [ "$choice" == "Ubuntu 16.04.6 LTS" ]; 
+if [ "$choice" == "xenial" ]; 
 then
 InstallUbuntu16_04
 fi
 
-if [ "$choice" == "Ubuntu 18.10" ]; 
+if [ "$choice" == "cosmic" ]; 
 then
 InstallUbuntu18_10
 fi
