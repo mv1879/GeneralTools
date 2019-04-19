@@ -1,12 +1,14 @@
 sudo apt update
 
+PKGS=graft-blockchain-tools graftnoded graft-wallet graft-supernode
+
 function InstallUbuntu18_04
 {
         echo "Distro chosen: Ubuntu 18.04" &&
         sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community bionic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install graftnoded graft-wallet-cli graft-supernode graft-blockchain-tools -y &
+        sudo apt install $PKGS -y &
 }
 
 function InstallDebian9Stretch
@@ -15,7 +17,7 @@ function InstallDebian9Stretch
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community stretch main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install graftnoded graft-wallet-cli graft-supernode graft-blockchain-tools -y &
+        sudo apt install $PKGS -y &
 }
 
 function InstallDebiantesting
@@ -24,7 +26,7 @@ function InstallDebiantesting
         sudo apt update && sudo apt upgrade -y && sudo apt install curl -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community sid main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install graftnoded graft-wallet-cli graft-supernode graft-blockchain-tools -y &
+        sudo apt install $PKGS -y &
 }
 
 function InstallInstallUbuntu16_04
@@ -33,7 +35,7 @@ function InstallInstallUbuntu16_04
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community xenial main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install graftnoded graft-wallet-cli graft-supernode graft-blockchain-tools -y &
+        sudo apt install $PKGS -y &
 }
 
 function InstallUbuntu18_10
@@ -42,7 +44,7 @@ function InstallUbuntu18_10
         sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https -y &&
         curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
         echo "deb [arch=amd64] https://deb.graft.community cosmic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt install graftnoded graft-wallet-cli graft-supernode graft-blockchain-tools -y &
+        sudo apt install $PKGS -y &
 }
 
 choice=$(whiptail --menu --separate-output "Choose an option" 25 78 16 \
