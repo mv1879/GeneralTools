@@ -1,89 +1,101 @@
+#!/bin/bash
+# Clone Repo and chmod the setupsn.sh
+# Run this script from same git clone location
+
+echo "Please input password to update apt and wait for prompts after completion"
 sudo apt update
 
-PKGS="graft-blockchain-tools graftnoded graft-wallet graft-supernode"
+# Get SN Number
+n=0
+for i in $(ls ~) ; do
+let n=$n+1
+done
+# End Get SN Number
 
-function InstallUbuntu18_04
+# Defaults
+DEF_NAME="SN"
+DEF_PORT=$((18000 + $n))
+# End Defaults
+
+SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 $DEF_NAME 3>&1 1>&2 2>&3)
+Wallet=$(whiptail --inputbox "Mainnet Wallet Address - Enter Wallet address for staking - Ctrl-Shift-V or Shift + Insert to paste from clipboard" 10 30 3>&1 1>&2 2>&3)
+SN_PORT=$(whiptail --inputbox "SN Port - Port to be used for SN - must be unique per SN" 10 30 $DEF_PORT 3>&1 1>&2 2>&3)
+RPC_PORT=$(whiptail --inputbox "RPC port for Graftnoded - Mainnet Defailt = 18981 | Public Testnet Default = 28881" 10 30 18981 3>&1 1>&2 2>&3)
+P2P_PORT=$(whiptail --inputbox "P2P port for Graftnoded - Mainnet Default = 18980 | Public Testnet Default = 28880" 10 30 18980 3>&1 1>&2 2>&3)
+USER=$(whoami)
+CURRENT_DIR=`pwd`
+HOME_DIR_VAR=`awk -F: -v v="$USER" '{if ($1==v) print $6}' /etc/passwd`
+ACTIVE_SSH_PORT=`sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:`
+
+function SetupSN()
 {
-        echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl gnupg2 -y &&
-        curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
-        echo "deb [arch=amd64] https://deb.graft.community bionic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt update && sudo apt install $PKGS -y &&
-        echo "Successfully installed $PKGS"
+cd ~/
+SN="$SN_NAME$(echo 000$n | tail -c 4)"
+mkdir ~/$SN &&
+cp $CURRENT_DIR/config.ini ~/"$SN"/config.ini &&
+sudo cp $CURRENT_DIR/graft-supernode@.service /etc/systemd/system/graft-supernode-$USER@.service &&
+sudo sed -i "s|EXEC_USER|$USER|g" /etc/systemd/system/graft-supernode-$USER@.service &&
+sudo sed -i "s|HOME_DIR|$HOME_DIR_VAR|g" /etc/systemd/system/graft-supernode-$USER@.service &&
+sed -i "s|data_dir_var|/home/$USER/$SN/|g" ~/"$SN"/config.ini &&
+sed -i "s/wallet_var/$Wallet/g" ~/"$SN"/config.ini &&
+sed -i "s/rpc_port/$RPC_PORT/g" ~/"$SN"/config.ini &&
+sed -i "s/p2p_port/$P2P_PORT/g" ~/"$SN"/config.ini &&
+sed -i "s/port_var/$SN_PORT/g" ~/"$SN"/config.ini &
 }
 
-function InstallDebian9Stretch
+function SetupSN-Systemd()
 {
-        echo "Installing Deb Packages for Distro: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
-        curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
-        echo "deb [arch=amd64] https://deb.graft.community stretch main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt update && sudo apt install $PKGS -y &&
-        echo "Successfully installed $PKGS"
+sudo systemctl enable graft-supernode-$USER@$SN.service
 }
 
-function InstallDebiantesting
+function SetupSN-Systemd-Start()
 {
-        echo "Installing Deb Packages for Distro: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl gnupg2 -y &&
-        curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
-        echo "deb [arch=amd64] https://deb.graft.community sid main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt update && sudo apt install $PKGS -y &&
-        echo "Successfully installed $PKGS"
+sudo systemctl start graft-supernode-$USER@$SN.service
 }
 
-function InstallUbuntu16_04
+function Allow-SN_PORT-Ufw()
 {
-        echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
-        curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
-        echo "deb [arch=amd64] https://deb.graft.community xenial main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt update && sudo apt install $PKGS -y &&
-        echo "Successfully installed $PKGS"
+UfwInstall=`sudo apt install ufw -y` &&
+UfwSNPortConfig=`sudo ufw allow $SN_PORT/tcp` &&
+UfwSSHPortConfig=`sudo ufw allow $ACTIVE_SSH_PORT/tcp`
 }
 
-function InstallUbuntu18_10
-{
-        echo "Distro chosen: $choice" &&
-        sudo apt update && sudo apt upgrade -y && sudo apt install curl apt-transport-https gnupg2 -y &&
-        curl -s https://deb.graft.community/public.gpg | sudo apt-key add - &&
-        echo "deb [arch=amd64] https://deb.graft.community cosmic main" | sudo tee /etc/apt/sources.list.d/graft.community.list &&
-        sudo apt update && sudo apt install $PKGS -y &&
-        echo "Successfully installed $PKGS"
-}
 
-# Commented out due to changes in script where version is detected automatically, below presents GUI giving choice of OS's
-#choice=$(whiptail --menu --separate-output "Choose an option" 25 78 16 \
-#"<-- Back" "Return to the main menu." \
-#"1" "Ubuntu 18.04." \
-#"2" "Debian 9 Stretch." \
-#"3" "Debian testing/unstable." \
-#"4" "Ubuntu 16.04 (xenial)." \
-#"5" "Ubuntu 18.10 (cosmic)." 3>&1 1>&2 2>&3)
+SetupSN $SN $Wallet $SN_PORT $DATA_DIR $RPC_PORT $P2P_PORT $USER
 
-choice=`lsb_release -ds 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 || uname -om`
-
-if [ "$choice" = "Ubuntu 18.04.2 LTS" ]; 
-then
-InstallUbuntu18_04
+if (whiptail --title "Setup systemd" --yesno "Setup systemd for this sn?" 10 60) then
+  SetupSN-Systemd $SN
 fi
 
-if [ "$choice" = "Debian GNU/Linux 9.8 (stretch)" ]; 
-then
-InstallDebian9Stretch
+if (whiptail --title "Start supernode" --yesno "Start supernode for this sn?" 10 60) then
+  SetupSN-Systemd-Start $SN
 fi
 
-if [ "$choice" = "Debian GNU/Linux buster/sid" ]; 
-then
-InstallDebiantesting
+if (whiptail --title "ufw configuration" --yesno "Would you like to open the SN port on ufw?" 10 60) then
+  Allow-SN_PORT-Ufw $SN_Port
 fi
 
-if [ "$choice" == "Ubuntu 16.04.6 LTS" ]; 
-then
-InstallUbuntu16_04
-fi
+variable=`tput setaf 6`
+text=`tput setaf 2`
+reset=`tput sgr0`
 
-if [ "$choice" == "Ubuntu 18.10" ]; 
-then
-InstallUbuntu18_10
-fi
+echo "${text}SN Number - ${variable}$SN"
+echo "${text}Mainnet Wallet Address - ${variable}$Wallet"
+echo "${text}Data Directory - ${variable}$DATA_DIR"
+echo "${text}RPC port for Graftnoded - ${variable}$RPC_PORT"
+echo "${text}P2P port for Graftnoded - ${variable}$P2P_PORT"
+echo "${text}Above values represent the values inserted and used for the setup of your supernode, please cd to ${variable}~/$SN"
+echo "${text}Script and config.ini location - ${variable}$CURRENT_DIR${reset}"
+echo "${text}Example command to restart supernode: ${variable}sudo systemctl restart graft-supernode-$USER@$SN.service"
+echo "${text}SN will start automatically on reboot"
+echo "${text}Install UFW result : ${variable}$UfwInstall"
+echo "${text}UFW Port configure Result : ${variable}$UfwSNPortConfig + SSH port currently in use: $ACTIVE_SSH_PORT has been configured = $UfwSSHPortConfig"
+echo "${text}Take note that ufw has not been enabled, please ensure your SSH port in use $ACTIVE_SSH_PORT is allowed before enabling with: ${variable} sudo ufw enable"
+
+# For Future use
+# Get port SSHD is currently using and listening on:
+# Command
+# sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:
+# expected return for standard ssh port:
+# 22
+# Can be used to add value to allow ufw command and then enable ufw to ensure user is not locked out, need to build error handling so enable doesnt go ahead if this fails, Tested on Debian Buster

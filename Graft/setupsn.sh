@@ -25,6 +25,7 @@ P2P_PORT=$(whiptail --inputbox "P2P port for Graftnoded - Mainnet Default = 1898
 USER=$(whoami)
 CURRENT_DIR=`pwd`
 HOME_DIR_VAR=`awk -F: -v v="$USER" '{if ($1==v) print $6}' /etc/passwd`
+ACTIVE_SSH_PORT=`sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:`
 
 function SetupSN()
 {
@@ -55,7 +56,8 @@ sudo systemctl start graft-supernode-$USER@$SN.service
 function Allow-SN_PORT-Ufw()
 {
 UfwInstall=`sudo apt install ufw -y` &&
-UfwPortConfig=`sudo ufw allow $SN_PORT/tcp`
+UfwSNPortConfig=`sudo ufw allow $SN_PORT/tcp` &&
+UfwSSHPortConfig=`sudo ufw allow $ACTIVE_SSH_PORT/tcp`
 }
 
 
@@ -87,8 +89,8 @@ echo "${text}Script and config.ini location - ${variable}$CURRENT_DIR${reset}"
 echo "${text}Example command to restart supernode: ${variable}sudo systemctl restart graft-supernode-$USER@$SN.service"
 echo "${text}SN will start automatically on reboot"
 echo "${text}Install UFW result : ${variable}$UfwInstall"
-echo "${text}UFW Port configure Result : ${variable}$UfwPortConfig"
-echo "${text}Take note that ufw has not been enabled, please ensure your SSH port is allowed before enabling with: ${variable} sudo ufw enable"
+echo "${text}UFW Port configure Result : ${variable}$UfwSNPortConfig + SSH port currently in use: $ACTIVE_SSH_PORT has been configured = $UfwSSHPortConfig"
+echo "${text}Take note that ufw has not been enabled, please ensure your SSH port in use $ACTIVE_SSH_PORT is allowed before enabling with: ${variable} sudo ufw enable"
 
 # For Future use
 # Get port SSHD is currently using and listening on:
