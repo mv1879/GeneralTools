@@ -89,3 +89,11 @@ echo "${text}SN will start automatically on reboot"
 echo "${text}Install UFW result : ${variable}$UfwInstall"
 echo "${text}UFW Port configure Result : ${variable}$UfwPortConfig"
 echo "${text}Take note that ufw has not been enabled, please ensure your SSH port is allowed before enabling with: ${variable} sudo ufw enable"
+
+# For Future use
+# Get port SSHD is currently using and listening on:
+# Command
+# sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:
+# expected return for standard ssh port:
+# 22
+# Can be used to add value to allow ufw command and then enable ufw to ensure user is not locked out, need to build error handling so enable doesnt go ahead if this fails, Tested on Debian Buster
