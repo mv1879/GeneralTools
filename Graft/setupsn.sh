@@ -17,12 +17,7 @@ DEF_NAME="SN"
 DEF_PORT=$((18000 + $n))
 # End Defaults
 
-
-<<<<<<< HEAD
-SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 $DEF_NAME 3>&1$)
-=======
 SN_NAME=$(whiptail --inputbox "SN Number - Folder directory to be created for SN - exclude numbering - script will detect next SN number in directory" 10 30 $DEF_NAME 3>&1 1>&2 2>&3)
->>>>>>> 3e673abf4bed7460b8fed444da09685deb2dbac6
 Wallet=$(whiptail --inputbox "Mainnet Wallet Address - Enter Wallet address for staking - Ctrl-Shift-V or Shift + Insert to paste from clipboard" 10 30 3>&1 1>&2 2>&3)
 SN_PORT=$(whiptail --inputbox "SN Port - Port to be used for SN - must be unique per SN" 10 30 $DEF_PORT 3>&1 1>&2 2>&3)
 RPC_PORT=$(whiptail --inputbox "RPC port for Graftnoded - Mainnet Defailt = 18981 | Public Testnet Default = 28881" 10 30 18981 3>&1 1>&2 2>&3)
@@ -30,6 +25,7 @@ P2P_PORT=$(whiptail --inputbox "P2P port for Graftnoded - Mainnet Default = 1898
 USER=$(whoami)
 CURRENT_DIR=`pwd`
 HOME_DIR_VAR=`awk -F: -v v="$USER" '{if ($1==v) print $6}' /etc/passwd`
+ACTIVE_SSH_PORT=`sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:`
 
 function SetupSN()
 {
@@ -60,7 +56,8 @@ sudo systemctl start graft-supernode-$USER@$SN.service
 function Allow-SN_PORT-Ufw()
 {
 UfwInstall=`sudo apt install ufw -y` &&
-UfwPortConfig=`sudo ufw allow $SN_PORT/tcp`
+UfwSNPortConfig=`sudo ufw allow $SN_PORT/tcp` &&
+UfwSSHPortConfig=`sudo ufw allow $ACTIVE_SSH_PORT/tcp`
 }
 
 
@@ -92,5 +89,13 @@ echo "${text}Script and config.ini location - ${variable}$CURRENT_DIR${reset}"
 echo "${text}Example command to restart supernode: ${variable}sudo systemctl restart graft-supernode-$USER@$SN.service"
 echo "${text}SN will start automatically on reboot"
 echo "${text}Install UFW result : ${variable}$UfwInstall"
-echo "${text}UFW Port configure Result : ${variable}$UfwPortConfig"
-echo "${text}Take note that ufw has not been enabled, please ensure your SSH port is allowed before enabling with: ${variable} sudo ufw enable"
+echo "${text}UFW Port configure Result : ${variable}$UfwSNPortConfig + SSH port currently in use: $ACTIVE_SSH_PORT has been configured = $UfwSSHPortConfig"
+echo "${text}Take note that ufw has not been enabled, please ensure your SSH port in use $ACTIVE_SSH_PORT is allowed before enabling with: ${variable} sudo ufw enable"
+
+# For Future use
+# Get port SSHD is currently using and listening on:
+# Command
+# sudo lsof -Pan -p $(ps aux | grep '[s]sh' | awk 'NR==1{print $2}') -i | awk 'NR==2{print $9}' | tr -d *:
+# expected return for standard ssh port:
+# 22
+# Can be used to add value to allow ufw command and then enable ufw to ensure user is not locked out, need to build error handling so enable doesnt go ahead if this fails, Tested on Debian Buster
