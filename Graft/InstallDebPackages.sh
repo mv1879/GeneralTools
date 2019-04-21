@@ -2,7 +2,7 @@ sudo apt update
 
 PKGS="graft-blockchain-tools graftnoded graft-wallet graft-supernode"
 
-function Graft
+function InstallGraft
 {
         echo "Distro chosen: $choice" &&
         sudo apt update && sudo apt upgrade -y && sudo apt install curl gnupg2 -y &&
