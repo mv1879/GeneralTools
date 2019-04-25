@@ -180,10 +180,10 @@ function DownloadGraftBlockChain()
 	"Mainnet" "" on  \
 	"Public Testnet" "" off 3>&1 1>&2 2>&3)
 
-	bc_choice1=`printf "$choice" | awk 'FNR == 1 {print}'`
-	bc_choice2=`printf "$choice" | awk 'FNR == 2 {print}'`
+	bc_choice1=`printf "$bc_choice" | awk 'FNR == 1 {print}'`
+	bc_choice2=`printf "$bc_choice" | awk 'FNR == 2 {print}'`
 
-	Function DownloadGraftBlockChain()
+	function DownloadGraftBlockChain1()
 	{
 		graftnoded --detach &&
 		cd $HOME/.graft/ &&
@@ -192,9 +192,9 @@ function DownloadGraftBlockChain()
     	rm -r lmdb &&
     	curl http://graftbuilds-ohio.s3.amazonaws.com/lmdb.tar.gz | tar xzf - &&
     	cd lmdb && rm em* && rm lo* &&
-    	cd
+    	cd &
 	}
-	Function DownloadGraftBlockChainTestnet()
+	function DownloadGraftBlockChainTestnet()
 	{
 		graftnoded --detach &&
 		cd $HOME/.graft/testnet/ &&
@@ -203,15 +203,15 @@ function DownloadGraftBlockChain()
     	rm -r lmdb &&
     	wget https://testnet.graft.observer/lmdb/ &&
     	cd lmdb && rm em* && rm lo* &&
-    	cd
+    	cd &
 	}
 
-	if [ "Mainnet" == "$choice1" ];
+	if [ "Mainnet" == "$bc_choice1" ];
 	then
-	DownloadGraftBlockChain
+	DownloadGraftBlockChain1
 	fi
 
-	if [ "Public Testnet" == "$choice1" ] || [ "$choice2" == "Public Testnet" ];
+	if [ "Public Testnet" == "$bc_choice1" ] || [ "$bc_choice2" == "Public Testnet" ];
 	then
 	DownloadGraftBlockChainTestnet
 	fi
@@ -240,12 +240,12 @@ then
 UpgradeGraftDebPackages
 fi
 
-if [ "Download Graft Blockchain" == "$choice1" ] || [ "$choice2" == "Download Graft Blockchain" ] || [ "$choice3" == "Download Graft Blockchain" || [ "$choice4" == "Download Graft Blockchain" ];
+if [ "Download Graft Blockchain" == "$choice1" ] || [ "$choice2" == "Download Graft Blockchain" ] || [ "$choice3" == "Download Graft Blockchain" ] || [ "$choice4" == "Download Graft Blockchain" ];
 then
 DownloadGraftBlockChain
 fi
 
-if [ "Start GraftNoded" == "$choice1" ] || [ "$choice2" == "Start GraftNoded" ] || [ "$choice3" == "Start GraftNoded" || [ "$choice4" == "Start GraftNoded" ];
+if [ "Start GraftNoded" == "$choice1" ] || [ "$choice2" == "Start GraftNoded" ] || [ "$choice3" == "Start GraftNoded" ] || [ "$choice4" == "Start GraftNoded" ];
 then
 StartGraftnoded
 fi
