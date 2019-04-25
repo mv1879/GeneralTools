@@ -4,12 +4,14 @@
 echo "Please input password to update apt and wait for prompts after completion"
 sudo apt update
 
-choice=$(whiptail --title "Test" --checklist --separate-output --cancel-button Cancel "Choose an option" 25 78 16 \
-"Install Deb Packages" "" on  \
-"Upgrade all Packages on my server" "" off \
-"Debian testing/unstable" "" off \
-"Ubuntu 16.04 (xenial)" "" off \
-"Ubuntu 18.10 (cosmic)" "" off 3>&1 1>&2 2>&3)
+PKGS="graft-blockchain-tools graftnoded graft-wallet graft-supernode"
+
+choice=$(whiptail --title "Graft Easy Setup" --checklist --separate-output --cancel-button Cancel "Choose an option" 25 78 16 \
+"Install Graft Community Deb Packages" "" on  \
+"Setup a Graft Supernode" "" off \
+"Upgrade only Graft Deb Packages" "" off \
+"Download Graft Blockchain" "" off \
+"Start GraftNoded" "" off 3>&1 1>&2 2>&3)
 
 #echo "$choice"
 
@@ -32,8 +34,6 @@ function InstallDebPackages()
 # Start of InstallDebPackages
 #####################################################################################################################################
 sudo apt update
-
-PKGS="graft-blockchain-tools graftnoded graft-wallet graft-supernode"
 
 function InstallGraft
 {
@@ -131,7 +131,6 @@ UfwSNPortConfig=`sudo ufw allow $SN_PORT/tcp` &&
 UfwSSHPortConfig=`sudo ufw allow $ACTIVE_SSH_PORT/tcp`
 }
 
-
 SetupSN $SN $Wallet $SN_PORT $DATA_DIR $RPC_PORT $P2P_PORT $USER
 
 if (whiptail --title "Setup systemd" --yesno "Setup systemd for this sn?" 10 60) then
@@ -167,18 +166,86 @@ echo "${text}Take note that ufw has not been enabled, please ensure your SSH por
 #####################################################################################################################################
 }
 
-if [ "Install Deb Packages" == "$choice1" ];
+function UpgradeGraftDebPackages()
+{
+	sudo apt update && sudo apt install $PKGS -y
+}
+
+function DownloadGraftBlockChain()
+{
+#####################################################################################################################################
+# Start of DownloadGraftBlockChain
+#####################################################################################################################################
+	bc_choice=$(whiptail --title "Download Graft Blockchain" --checklist --separate-output --cancel-button Cancel "Choose an option" 25 78 16 \
+	"Mainnet" "" on  \
+	"Public Testnet" "" off 3>&1 1>&2 2>&3)
+
+	bc_choice1=`printf "$choice" | awk 'FNR == 1 {print}'`
+	bc_choice2=`printf "$choice" | awk 'FNR == 2 {print}'`
+
+	Function DownloadGraftBlockChain()
+	{
+		graftnoded --detach &&
+		cd $HOME/.graft/ &&
+		graftnoded status &&
+		graftnoded stop_daemon &&
+    	rm -r lmdb &&
+    	curl http://graftbuilds-ohio.s3.amazonaws.com/lmdb.tar.gz | tar xzf - &&
+    	cd lmdb && rm em* && rm lo* &&
+    	cd
+	}
+	Function DownloadGraftBlockChainTestnet()
+	{
+		graftnoded --detach &&
+		cd $HOME/.graft/testnet/ &&
+		graftnoded status &&
+		graftnoded stop_daemon &&
+    	rm -r lmdb &&
+    	wget https://testnet.graft.observer/lmdb/ &&
+    	cd lmdb && rm em* && rm lo* &&
+    	cd
+	}
+
+	if [ "Mainnet" == "$choice1" ];
+	then
+	DownloadGraftBlockChain
+	fi
+
+	if [ "Public Testnet" == "$choice1" ] || [ "$choice2" == "Public Testnet" ];
+	then
+	DownloadGraftBlockChainTestnet
+	fi
+#####################################################################################################################################
+# End of DownloadGraftBlockChain
+#####################################################################################################################################
+}
+
+function StartGraftnoded()
+{
+	graftnoded --detach
+}
+
+if [ "Install Graft Community Deb Packages" == "$choice1" ];
 then
 InstallDebPackages
 fi
 
-### Below commented out because Install Deb Packages will never be lower than line 1 as is first in the choice whiptail list
-#if [ "Install Deb Packages" == "$choice1" ] || [ "$choice2" == "Install Deb Packages" ];
-#then
-#InstallDebPackages
-#fi
-
-if [ "Upgrade all Packages on my server" == "$choice1" ] || [ "$choice2" == "Upgrade all Packages on my server" ];
+if [ "Setup a Graft Supernode" == "$choice1" ] || [ "$choice2" == "Setup a Graft Supernode" ];
 then
 SetupSupernode
+fi
+
+if [ "Upgrade only Graft Deb Packages" == "$choice1" ] || [ "$choice2" == "Upgrade only Graft Deb Packages" ] || [ "$choice3" == "Upgrade only Graft Deb Packages" ];
+then
+UpgradeGraftDebPackages
+fi
+
+if [ "Download Graft Blockchain" == "$choice1" ] || [ "$choice2" == "Download Graft Blockchain" ] || [ "$choice3" == "Download Graft Blockchain" || [ "$choice4" == "Download Graft Blockchain" ];
+then
+DownloadGraftBlockChain
+fi
+
+if [ "Start GraftNoded" == "$choice1" ] || [ "$choice2" == "Start GraftNoded" ] || [ "$choice3" == "Start GraftNoded" || [ "$choice4" == "Start GraftNoded" ];
+then
+StartGraftnoded
 fi
