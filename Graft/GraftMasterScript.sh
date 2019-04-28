@@ -190,7 +190,7 @@ function DownloadGraftBlockChain()
 		graftnoded status &&
 		graftnoded stop_daemon &&
     	rm -r lmdb &&
-    	curl http://graftbuilds-ohio.s3.amazonaws.com/lmdb.tar.gz | tar xzf - &&
+    	curl graftbuilds-ohio.s3.amazonaws.com/lmdb.tar.gz | tar xzf - &&
     	cd lmdb && rm em* && rm lo* &&
     	cd &
 	}
