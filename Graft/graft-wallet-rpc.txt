@@ -1,0 +1,52 @@
+https://src.getmonero.org/resources/developer-guides/wallet-rpc.html
+
+graft-wallet-rpc --rpc-bind-port 19081 --wallet-file "test" --rpc-login username:password
+
+Create Integrated address
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"make_integrated_address","params":{"standard_address":"<wallet_address>"}}' -H 'Content-Type: application/json'
+For:
+
+G6Tigczf8Xn6m1PBEyDxjQ11fohRkstiFSWcyNemcWWudGAgBsFa1qcKrR2Rcsq6gvWKZHFK9FeRoepxnFyNqAWzV2S6SZS
+
+{
+  "id": "0",
+  "jsonrpc": "2.0",
+  "result": {
+    "integrated_address": "GKRqGHyjvEnSX9CqhrWsXnXAJMraYrsdq8eDHaSsGrCpA2G96oY9VvRH9tqK7a47vZFwZ6eGUNyhARngqKN8iUnYGZpwws9vRDUHYNvCBY",
+    "payment_id": "101a08390a5dbb92"
+  }
+
+
+Get Height
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"getheight"}' -H 'Content-Type: application/json'
+
+Get Balance
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"getbalance"}' -H 'Content-Type: application/json'
+
+
+get_balance
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"get_balance","params":{"account_index":0,"address_indices":[0,1]}}' -H 'Content-Type: application/json'
+
+Incoming Transfers
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"incoming_transfers","params":{"transfer_type":"all","account_index":0,"subaddr_indices":[3],"verbose":true}}' -H 'Content-Type: application/json'
+
+get_transfer_by_txid
+
+curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"get_transfer_by_txid","params":{"txid":"c36258a276018c3a4bc1f195a7fb530f50cd63a4fa765fb7c6f7f49fc051762a"}}' -H 'Content-Type: application/json'
+
+
+
+
+
+
+
+
+# Not present in current Monero version:
+#get_address_index
+#
+#curl -u username:password --digest -X POST http://127.0.0.1:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"get_address_index","params":{"address":"GKRqGHyjvEnSX9CqhrWsXnXAJMraYrsdq8eDHaSsGrCpA2G96oY9VvRH9tqK7a47vZFwZ6eGUNyhARngqKN8iUnYGZpwws9vRDUHYNvCBY"}}' -H 'Content-Type: application/json'

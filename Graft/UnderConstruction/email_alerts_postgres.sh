@@ -7,7 +7,7 @@
 #NAME="${name}"
 #TELEGRAM_HANDLE="$telegram_handle"
 #EMAIL_ADDRESS="$email_address"
-#
+# Add too snsetup function/script to be actioned on creation or execute script on local DB server and execute below function
 #function NewGraftCustomer()
 # {
 #   psql -U postgres -d test_db -c "insert into graft_sn_customers (name,telegram_handle,email) values ("\'$NAME\'","\'$TELEGRAM_HANDLE\'","\'$EMAIL_ADDRESS\'")"
@@ -42,6 +42,8 @@
 #as user with access -U = user logged in as
 #in example startdate cloumn will a day value eg, 24
 
+# $1 = first variable passed by 
+
 function EMAIL_USER
 {
     echo "TEST_FUNCTION $1"
@@ -50,7 +52,8 @@ function EMAIL_USER
 SYSTEMDATE=\'$(date +'%d-%m-%Y')\'
 SYSTEMDAY=`date +'%d'`
 QUERY_RESULTS=`psql -U postgres -d test_db -c "SELECT * FROM test_table"`
-#QUERY_RESULTS=`psql -U postgres -d test_db -c "SELECT EXTRACT(DAY FROM TIMESTAMP 'choice1_1')";`
+# QUERY_RESULTS=`psql -U postgres -d test_db -c "SELECT EXTRACT(DAY FROM TIMESTAMP 'choice1_1')";`
+# {printf "%0s ", $3} = $3 is equal to column 3 for example, this change with database changes = TEST!
 
 #column 3 ($3) equal to email
 choice1=`printf "$QUERY_RESULTS" | awk 'FNR == 3 {printf "%0s ", $3}'`
@@ -92,6 +95,9 @@ choice3_2=`echo $choice3_1 | cut -d'-' -f1`
 echo "choice1: $choice1"
 echo "choice1_1: $choice1_1"
 
+#execute EMAIL_USER if day value is same
+#consider [ "$SYSTEMDAY-$choice1_2" -lt "4" ]; = payment date is less than 4 days away 
+
 	if [ "$SYSTEMDAY" == "$choice1_2" ];
 	then
 	EMAIL_USER $choice1
@@ -131,12 +137,57 @@ echo "choice1_1: $choice1_1"
 ##choice17=`printf "$QUERY_RESULTS" | awk 'FNR == 20 {printf "%0s %1s ", $3 , $9}'`
 
 
-testing
+##testing
+##
+##`date +'%d-%m-%Y'` | awk 'BEGIN { print strftime(" %d", date +'%d-%m-%Y')}
+##
+##
+##awk 'BEGIN { print strftime(" %d", `date +'%d-%m-%Y`)}'
+##
+##
+##FS=’-’ read -ra NAMES <<< "28-04-2019" echo ${NAMES[1]}
+##
+##Resources:
+##
+##https://blog.edmdesigner.com/send-email-from-linux-command-line/
+##
+##email template
+##
+##	Cc: fez29@protonmail.com
+##	Subject: testing email
+##	From: fezmv@protonmail.com
+##	Content-Type: text/html; charset="utf8"
+##
+##
+##	html>
+##	<body>
+##	<div style="
+##		background-color:
+##		#abcdef; width: 300px;
+##		height: 300px;
+##		">
+##	</div>
+##	This is a Reminder of payment due for your Hosted supernodes.
+##	</body>
+##	</html>
 
-`date +'%d-%m-%Y'` | awk 'BEGIN { print strftime(" %d", date +'%d-%m-%Y')}
+#required for database
 
+Customer table
 
-awk 'BEGIN { print strftime(" %d", `date +'%d-%m-%Y`)}'
+ID/Primary Key
+Customer Number
+Customer details (Name,Telegram handle)
+email
+Email alerts (Yes/No)
+Sign Up date
 
+Payments table
 
-FS=’-’ read -ra NAMES <<< "28-04-2019" echo ${NAMES[1]}
+ID/Primary Key
+Customer Number
+Currency
+Date Paid
+For Month
+TX ID
+Confirmed?
