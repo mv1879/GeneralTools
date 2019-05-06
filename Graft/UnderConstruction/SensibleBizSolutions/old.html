@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+<head>
+    <!-- Front Page.html -->
+    <title>Information.html</title>
+    <meta charset = "UTF-8" />
+    <script>document.createElement("myHero")</script>
+        <style>
+        myHero {
+          display: block;
+          background-color: #dddddd;
+          padding: 10px;
+          font-size: 20px;
+        }
+</style>
+</head>
+<body>
+    <h1>Sensible Biz Solutions</h1>
+    <p>
+<h2>Welcome to Sensible Biz Solutions</h2>
+    <p>
+We are a startup company that is targeting novice Linux users to provide hosting of services for them and providing this at an extrememly affordable rate.
+    </p>
+    <myHero>
+        <h2>About</h2>
+        We accept payments only in CryptoCurrency
+        Currently that is:
+        Monero (XMR)
+        Loki (LOKI)
+        Graft (GRFT)
+        Bitcoin (BTC)
+    </myHero>
+    </p>
+    Please select your payment type here
+    <form action="./testexec.php" method="post">
+        <!-- For dropdown list
+        <select>
+        <option value="XMR">Monero (XMR)</option>
+        <option value="LOKI">Loki (LOKI)</option>
+        <option value="GRFT">Graft (GRFT)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        </select> 
+    For box to slect with each value
+    Currency: <input type="submit" name="option value" value="XMR"><br>
+    -->
+
+        Currency: <input type="text" name="value" value="XMR"/>
+	Wallet Address: <input type="text" name="walletaddress" value=""/>
+        <input type="Submit" value="Submit"/>
+    	</form>
+
+		<form action="./getexpirydate.php" method="post">
+			PublicId: 	<input type="text" name="PublicId" value=""/>
+					<input type="Submit" value="Submit"/>
+	</form>
+	
+	<form>Create Stake Command:</form>
+
+	<form action="./stakecommand.php" method="post">
+        	IP: <input type="text" name="IP_value" value=''/>
+	        PORT: <input type="text" name="PORT_value" value=''/>
+		STAKE AMOUNT: <input type="text" name="STAKE_AMOUNT_value" value=""/>
+		STAKE PERIOD: <input type="text" name="STAKE_BLOCK_PERIOD_value" value=""/>
+		<input type="Submit" value="Submit"/>
+	</form>
+		
+
+</body>
+</html>
+
+
+<!--
+    cgi example https://www.cyberciti.biz/tips/executing-linuxunix-commands-from-web-page-part-i.html
+-->
+
