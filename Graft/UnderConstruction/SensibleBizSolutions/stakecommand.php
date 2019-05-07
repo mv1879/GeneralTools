@@ -1,13 +1,12 @@
 <?php
-        /*$IP_VALUE="51.79.43.168" ;
-        $PORT_VALUE="18690" ;
-        $STAKE_AMOUNT_VALUE="50000" ;
-        $STAKE_BLOCK_PERIOD_VALUE="5000" ;*/
-	$IP_VALUE=$_POST["IP_value"] ;
-	$PORT_VALUE=$_POST["PORT_value"] ;
-        $STAKE_AMOUNT_VALUE=$_POST["STAKE_AMOUNT_value"] ;
-        $STAKE_BLOCK_PERIOD_VALUE=$_POST["STAKE_BLOCK_PERIOD_value"] ;
-        $RETURN=exec ("/var/www/sensiblebizsolutions.com/html/getstakecommand.sh $IP_VALUE $PORT_VALUE $STAKE_AMOUNT_VALUE $STAKE_BLOCK_PERIOD_VALUE");
+    $ip=$_POST["IP_value"] ;
+    $port=$_POST["PORT_value"] ;
+    $stake=$_POST["STAKE_AMOUNT_value"] ;
+    $blocks=$_POST["STAKE_BLOCK_PERIOD_value"] ;
+    
+    $json = file_get_contents("http://$ip:$port/dapi/v2.0/cryptonode/getwalletaddress");
+    $obj = json_decode($json);
+    $RETURN = "stake_transfer $obj->wallet_public_address $stake $blocks $obj->id_key $obj->signature";
 ?>
 
 <!DOCTYPE html>
