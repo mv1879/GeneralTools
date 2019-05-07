@@ -1,3 +1,23 @@
+Maintenance with systemd - multiple services
+
+Examples: 
+
+sn1 to sn21
+
+sudo systemctl enable graft-supernode\@sn{1..21}.service
+
+sudo systemctl start graft-supernode\@sn{1..21}.service
+
+sudo systemctl stop graft-supernode\@sn{1..21}.service
+
+sudo systemctl disable graft-supernode\@sn{1..21}.service
+
+sn001 to sn0021
+
+sudo systemctl enable graft-supernode\@sn{001..021}.service
+
+SCP commands
+
 scp from remote to local
 
 scp -P <port> <remote_user>@<remote_machine_ip>:/<remote_machine_directory> ~/<local_machine_directory>
@@ -10,7 +30,7 @@ add -r if is a directory
 
 Mounting a FTP location directly in Debian
 
-sudo curlftpfs -o allow_other ftp://ns391034.ip-176-31-102.eu:EG7EeuJT9z@ftpback-rbx3-269.ovh.net /mnt/ftp
+sudo curlftpfs -o allow_other ftp://ns391034.ip-176-31-102.eu:EG7EeuJTsdaa@ftpback-rbx3-269.ovh.net /mnt/ftp
 
 
 Useful:

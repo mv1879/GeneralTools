@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+<head>
+    <!-- Front Page.html -->
+    <title>Information.html</title>
+    <meta charset = "UTF-8" />
+    <script>document.createElement("myHero")</script>
+        <style>
+        myHero {
+          display: block;
+          background-color: #dddddd;
+          padding: 10px;
+          font-size: 20px;
+        }
+</style> 
+</head>
+<body>
+    <h1>Sensible Biz Solutions</h1>
+    <p>
+<h2>Welcome to Sensible Biz Solutions</h2>
+    <p>
+We are a startup company that is targeting novice Linux users to provide hosting of services for them and providing this at an extrememly affordable rate.
+    </p>
+    <myHero>
+        <h2>About</h2>
+        We accept payments only in CryptoCurrency.
+        <br>
+        Currently that is:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Monero (XMR)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loki (LOKI)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Graft (GRFT)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bitcoin (BTC)<br>
+    </myHero>
+    </p>
+    Please select your payment type here
+    <form>Currency</form>
+
+    <form action="./testexec.php" method="post">
+        <!-- For dropdown list
+        <select>
+        <option value="XMR">Monero (XMR)</option>
+        <option value="LOKI">Loki (LOKI)</option>
+        <option value="GRFT">Graft (GRFT)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        </select> 
+    For box to slect with each value
+    Currency: <input type="submit" name="option value" value="XMR"><br>
+    -->
+
+        Currency: <input type="select" name="option value" value="XMR"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Create Stake Command -->
+
+    <form>Create Stake Command</form>
+
+    <form action="./stakecommand.php" method="post">
+        IP: <input type="text" name="IP_value" value=''/>
+        PORT: <input type="text" name="PORT_value" value=''/>
+        STAKE AMOUNT: <input type="text" name="STAKE_AMOUNT_value" value=""/>
+        STAKE PERIOD: <input type="text" name="STAKE_BLOCK_PERIOD_value" value=""/>
+        <input type="Submit" value="Submit"/>
+    </form>
+
+
+<!-- CoinMarketCap Widget -->
+    
+    <script type="text/javascript" 
+        src="https://files.coinmarketcap.com/static/widget/currency.js">
+    </script>
+    <div class="coinmarketcap-currency-widget" 
+        data-currencyid="2571" 
+        data-base="BTC" 
+        data-secondary="USD" 
+        data-ticker="true" 
+        data-rank="true" 
+        data-marketcap="true" 
+        data-volume="true" 
+        data-stats="USD" 
+        data-statsticker="true">
+    </div>
+</body>
+</html>
+
+<!--
+Add to Site:
+
+https://coinmarketcap.com/converter/
+
+Embed WebPage onto site:
+
+http://allwebco-templates.com/support/S_script_IFrame.htm
+
+-->
+
+<!--
+
+    Setup apache2
+
+    https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-debian-9
+
+    https://www.digitalocean.com/docs/networking/dns/
+    
+    cgi example https://www.cyberciti.biz/tips/executing-linuxunix-commands-from-web-page-part-i.html
+
+    Grant access to www-data user
+
+    sudo chown -R www-data:www-data /var/www/sensiblebizsolutions.com/html
+
+    Running sudo commands in Apache
+
+    visudo -f /etc/sudoers.d/Webserver
+
+    www-data ALL = (root) NOPASSWD: <executable_file_path>
+
+    Check apache logs
+
+    /var/log/apache2/error.log
+
+    Apache COnfig File
+
+    nano /etc/apache2/apache2.conf
+
+    Apache Environment Variables
+
+    /etc/apache2/envvars
+
+ColourCode PHP echos Note
+
+php > echo "3[0;31m Hi Tecmint \x1B[0m";
+
+<VirtualHost *:80>
+    ServerAdmin admin@sensiblebizsolutions.com
+    ServerName sensiblebizsolutions.com
+    ServerAlias www.sensiblebizsolutions.com
+    DocumentRoot /var/www/sensiblebizsolutions.com/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+https://www.digitalocean.com/docs/networking/dns/
+
+get values from json and remove "" on outside
+remomember to install jq on server
+
+curl -s http://51.79.43.168:18690/dapi/v2.0/cryptonode/getwalletaddress | jq '.wallet_public_address' | tr -d '" '
+G5pNcVTNwk1jS4H264Q3WtSEYrzuZ4uVhbj5Q1tGaai8EzYJwatp8kjLrnRDxAsZmUbfy3b4we75EVEu4P2iutG6NCzb7HK
+
+Get Entire block of JSON response for PublicId
+
+curl -s http://51.79.43.168:18690/debug/supernode_list/0 | jq '.result' | jq '.items' | jq '.[] | select(.PublicId=="8e3f26cbec8aa0df2a55373aa4247fff53042ba0faae788855fb524780fce1e2")' > json_result.txt
+
+{
+  "Address": "GAZ4nfTiT6fGHN2z9tBn5ujK7xTzZn7EQ4hF5hS1PVtiJSe5VG6xWksihKn6NqT9HHCNkGoGwWurZ7aHgqXbdE2QAkLuc7Y",
+  "PublicId": "8e3f26cbec8aa0df2a55373aa4247fff53042ba0faae788855fb524780fce1e2",
+  "StakeAmount": 500004484503760,
+  "StakeFirstValidBlock": 340259,
+  "StakeExpiringBlock": 343087,
+  "IsStakeValid": true,
+  "BlockchainBasedListTier": 1,
+  "AuthSampleBlockchainBasedListTier": 0,
+  "IsAvailableForAuthSample": true,
+  "LastUpdateAge": 50
+}
+
+Get Expiring Block
+
+curl -s http://51.79.43.168:18690/debug/supernode_list/0 | jq '.result' | jq '.items' | jq '.[] | select(.PublicId=="8e3f26cbec8aa0df2a55373aa4247fff53042ba0faae788855fb524780fce1e2")' | jq '.StakeExpiringBlock' > json_result.txt
+
+-->
+
+  <!-- display: block; -->
